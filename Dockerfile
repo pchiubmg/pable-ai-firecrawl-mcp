@@ -40,8 +40,7 @@ RUN pnpm install --prod --frozen-lockfile --ignore-scripts
 # Set environment variables for API key and custom API URL if needed
 
 
-ENV PORT=8080
-EXPOSE 8080
+EXPOSE 3000
 
 # Specify the command to run the application
 ENTRYPOINT ["node", "dist/index.js"]
