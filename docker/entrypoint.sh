@@ -1,8 +1,11 @@
 #!/usr/bin/env sh
-set -e
 
-# Start Node MCP server on internal port 3000 (hardcode PORT to avoid Railway override)
-CLOUD_SERVICE=true PORT=3000 node dist/index.js &
+# Start Node MCP server on internal port 3000
+CLOUD_SERVICE=true PORT=3000 HTTP_STREAMABLE_SERVER=true node dist/index.js &
+NODE_PID=$!
+
+# Give Node time to bind to port 3000
+sleep 2
 
 # Start oauth2-proxy on port 4180 — validates Google tokens, proxies to Node on 3000
 oauth2-proxy \
