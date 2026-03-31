@@ -11,7 +11,7 @@ oauth2-proxy \
   --client-secret="${GOOGLE_CLIENT_SECRET}" \
   --cookie-secret="${OAUTH2_PROXY_COOKIE_SECRET}" \
   --email-domain="${OAUTH2_PROXY_EMAIL_DOMAIN:-*}" \
-  --upstream="http://localhost:3000" \
+  --upstream="http://127.0.0.1:3000" \
   --http-address="0.0.0.0:4180" \
   --redirect-url="${OAUTH2_PROXY_REDIRECT_URL}" \
   --skip-jwt-bearer-tokens=true \
