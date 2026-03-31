@@ -1,21 +1,24 @@
 #!/usr/bin/env sh
 
-# Start Node MCP server on internal port 3000
-CLOUD_SERVICE=true PORT=3000 HTTP_STREAMABLE_SERVER=true node dist/index.js &
+echo "Starting Node MCP server on port 3000..."
+CLOUD_SERVICE=true HTTP_STREAMABLE_SERVER=true PORT=3000 node dist/index.js &
 NODE_PID=$!
 
-# Give Node time to bind to port 3000
-sleep 2
+echo "Waiting for Node to start..."
+sleep 3
 
-# Start oauth2-proxy on port 4180 — validates Google tokens, proxies to Node on 3000
-oauth2-proxy \
+echo "Checking if Node is listening..."
+netstat -tlnp 2>/dev/null || ss -tlnp 2>/dev/null || echo "netstat not available"
+
+echo "Starting oauth2-proxy on port 8080..."
+exec oauth2-proxy \
   --provider=google \
   --client-id="${GOOGLE_CLIENT_ID}" \
   --client-secret="${GOOGLE_CLIENT_SECRET}" \
   --cookie-secret="${OAUTH2_PROXY_COOKIE_SECRET}" \
   --email-domain="${OAUTH2_PROXY_EMAIL_DOMAIN:-*}" \
   --upstream="http://127.0.0.1:3000" \
-  --http-address="0.0.0.0:4180" \
+  --http-address="0.0.0.0:8080" \
   --redirect-url="${OAUTH2_PROXY_REDIRECT_URL}" \
   --skip-jwt-bearer-tokens=true \
   --skip-provider-button=true \
@@ -23,7 +26,4 @@ oauth2-proxy \
   --pass-authorization-header=true \
   --pass-access-token=true \
   --force-https=true \
-  --reverse-proxy=true &
-
-# Start NGINX in foreground (proxies :8080 → oauth2-proxy :4180)
-nginx -g 'daemon off;'
+  --reverse-proxy=true
