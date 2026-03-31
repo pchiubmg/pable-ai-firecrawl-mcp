@@ -1241,7 +1241,7 @@ Stop an interact session for a scraped page. Call this when you are done interac
 const PORT = Number(process.env.PORT || 3000);
 const HOST =
   process.env.CLOUD_SERVICE === 'true'
-    ? '0.0.0.0'
+    ? (process.env.HOST || '::')
     : process.env.HOST || 'localhost';
 type StartArgs = Parameters<typeof server.start>[0];
 let args: StartArgs;
