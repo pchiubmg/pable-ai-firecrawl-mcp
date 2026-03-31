@@ -18,7 +18,9 @@ oauth2-proxy \
   --skip-provider-button=true \
   --cookie-secure=true \
   --pass-authorization-header=true \
-  --pass-access-token=true &
+  --pass-access-token=true \
+  --force-https=true \
+  --reverse-proxy=true &
 
 # Start NGINX in foreground (proxies :8080 → oauth2-proxy :4180)
 nginx -g 'daemon off;'
